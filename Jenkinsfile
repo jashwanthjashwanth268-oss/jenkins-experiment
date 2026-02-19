@@ -1,21 +1,23 @@
 pipeline {
     agent any
+    parameters {
+        string(name: 'USERNAME', defaultValue: 'Guest', description: 'Enter your name')
+    }
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-        stage('Create File') {
+        stage('Store User Data') {
             steps {
-                // Creates a file and writes text into it
-                bat 'echo This is the content of the output file > output.txt'
+                // Note the use of double quotes for variable expansion in the bat command
+                bat "echo ${params.USERNAME} > user.txt"
             }
         }
-        stage('Display Content') {
+        stage('Verify Storage') {
             steps {
-                // Reads the file back to the console
-                bat 'type output.txt' 
+                bat 'type user.txt'
             }
         }
     }
