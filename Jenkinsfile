@@ -1,23 +1,20 @@
 pipeline {
     agent any
-    parameters {
-        string(name: 'USERNAME', defaultValue: 'Guest', description: 'Enter your name')
-    }
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-        stage('Store User Data') {
+        stage('Manual Approval') {
             steps {
-                // Note the use of double quotes for variable expansion in the bat command
-                bat "echo ${params.USERNAME} > user.txt"
+                // This will pause the pipeline and show a button
+                input message: 'Proceed with Build?', ok: 'Yes, Proceed'
             }
         }
-        stage('Verify Storage') {
+        stage('Post-Approval') {
             steps {
-                bat 'type user.txt'
+                echo "The build has been approved and is continuing..."
             }
         }
     }
