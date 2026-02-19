@@ -6,15 +6,21 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Build Info') {
+        stage('Get User Text') {
             steps {
-                // BUILD_NUMBER is a built-in variable in Jenkins
-                echo "Current Jenkins Build Number: ${env.BUILD_NUMBER}"
+                script {
+                    env.MY_TEXT = input(
+                        message: 'Enter text to save',
+                        parameters: [string(name: 'CONTENT', description: 'What should go in the file?')]
+                    )
+                }
             }
         }
-        stage('Status') {
+        stage('Save to File') {
             steps {
-                echo "Status: Execution of build #${env.BUILD_NUMBER} is successful."
+                // This saves the text you typed into input_data.txt
+                bat "echo ${env.MY_TEXT} > input_data.txt"
+                bat 'type input_data.txt'
             }
         }
     }
