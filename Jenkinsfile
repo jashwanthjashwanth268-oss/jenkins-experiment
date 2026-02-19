@@ -6,15 +6,20 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Manual Approval') {
+        stage('Interactive Input') {
             steps {
-                // This will pause the pipeline and show a button
-                input message: 'Proceed with Build?', ok: 'Yes, Proceed'
+                script {
+                    // This asks for a value while the pipeline is running
+                    env.USER_CONFIRM = input(
+                        message: 'Please confirm',
+                        parameters: [string(name: 'CONFIRM_CODE', defaultValue: 'Approved', description: 'Type "Approved" to continue')]
+                    )
+                }
             }
         }
-        stage('Post-Approval') {
+        stage('Verify Approval') {
             steps {
-                echo "The build has been approved and is continuing..."
+                bat "echo The user entered: ${env.USER_CONFIRM}"
             }
         }
     }
