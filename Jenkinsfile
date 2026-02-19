@@ -1,7 +1,7 @@
 pipeline {
     agent any
     parameters {
-        string(name: 'MESSAGE', defaultValue: 'Hello world', description: 'Type something here')
+        string(name: 'MESSAGE', defaultValue: 'Verification Test', description: 'Enter a message')
     }
     stages {
         stage('Checkout') {
@@ -9,14 +9,14 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Print Message') {
+        stage('System Date') {
             steps {
-                echo "The message is: ${params.MESSAGE}"
+                bat 'date /t' // Displays current system date in Windows
             }
         }
-        stage('Windows Command') {
+        stage('Verify Parameter') {
             steps {
-                bat 'echo Hello from Jenkins'
+                echo "Re-verifying parameter: ${params.MESSAGE}"
             }
         }
     }
