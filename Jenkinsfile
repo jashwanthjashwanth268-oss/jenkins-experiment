@@ -6,20 +6,15 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Interactive Input') {
+        stage('Build Info') {
             steps {
-                script {
-                    // This asks for a value while the pipeline is running
-                    env.USER_CONFIRM = input(
-                        message: 'Please confirm',
-                        parameters: [string(name: 'CONFIRM_CODE', defaultValue: 'Approved', description: 'Type "Approved" to continue')]
-                    )
-                }
+                // BUILD_NUMBER is a built-in variable in Jenkins
+                echo "Current Jenkins Build Number: ${env.BUILD_NUMBER}"
             }
         }
-        stage('Verify Approval') {
+        stage('Status') {
             steps {
-                bat "echo The user entered: ${env.USER_CONFIRM}"
+                echo "Status: Execution of build #${env.BUILD_NUMBER} is successful."
             }
         }
     }
