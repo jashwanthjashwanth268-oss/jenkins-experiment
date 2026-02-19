@@ -1,22 +1,21 @@
 pipeline {
     agent any
-    parameters {
-        string(name: 'MESSAGE', defaultValue: 'Verification Test', description: 'Enter a message')
-    }
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-        stage('System Date') {
+        stage('Create File') {
             steps {
-                bat 'date /t' // Displays current system date in Windows
+                // Creates a file and writes text into it
+                bat 'echo This is the content of the output file > output.txt'
             }
         }
-        stage('Verify Parameter') {
+        stage('Display Content') {
             steps {
-                echo "Re-verifying parameter: ${params.MESSAGE}"
+                // Reads the file back to the console
+                bat 'type output.txt' 
             }
         }
     }
